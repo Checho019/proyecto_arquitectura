@@ -126,7 +126,7 @@
 
             // Generar datos
             var datos;
-            fetch('http://localhost:3000/park/' + localStorage.getItem('id'))
+            fetch('https://proyectoarquitectura-production.up.railway.app/park/' + localStorage.getItem('id'))
                 .then(response => response.json())
                 .then(data => {
                     datos = data;

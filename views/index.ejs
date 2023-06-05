@@ -74,7 +74,7 @@
 
       // Generar datos
       var datos;
-      fetch('http://localhost:3000/park')
+      fetch('https://proyectoarquitectura-production.up.railway.app/park')
         .then(response => response.json())
         .then(data => {
           datos = data;
@@ -108,7 +108,7 @@
 
       // Generar Espacios para seleccionar parqueaderos
       // Ciudades
-      fetch('http://localhost:3000/ciudades')
+      fetch('https://proyectoarquitectura-production.up.railway.app/ciudades')
         .then(response => response.json())
         .then(data => {
           document.getElementById('ciudades').innerHTML = `
@@ -129,7 +129,7 @@
         });
 
         // Caracteristicas
-        fetch('http://localhost:3000/caracteristicas')
+        fetch('https://proyectoarquitectura-production.up.railway.app/caracteristicas')
         .then(response => response.json())
         .then(data => {
           document.getElementById('caracteristicas').innerHTML = `
@@ -152,7 +152,7 @@
         });
 
         // Puntos
-        fetch('http://localhost:3000/puntos')
+        fetch('https://proyectoarquitectura-production.up.railway.app/puntos')
         .then(response => response.json())
         .then(data => {
           document.getElementById('puntos').innerHTML = `
