@@ -1,0 +1,181 @@
+<%- include('partials/head') %>
+  <title>Park-UD</title>
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-black">
+      <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse px-3" id="navbarText">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Car_with_Driver-Silhouette.svg/1200px-Car_with_Driver-Silhouette.svg.png"
+              alt="Logo" width="90" height="70" class="d-inline-block align-text-top mx-3"
+              style="filter: invert(100%)" />
+            <li class="nav-item mx-2"></li>
+            <button class="btn btn-dark my-2" id="btn-reserva">
+              Reserva
+            </button>
+            <li class="nav-item mx-2"></li>
+            <button class="btn btn-dark my-2" id="btn-historial">
+              Historial
+            </button>
+            <li class="nav-item mx-2"></li>
+            <button class="btn btn-dark my-2" id="btn-liquidacion">
+              Usuario
+            </button>
+          </ul>
+          <span class="navbar-text text-light">
+            <ul class="mb-1">
+              <li class="nav-item" style="list-style-type: none">
+                <ul class="navbar-nav me-auto mb-lg-0">
+                  <li class="nav-item mx-2">
+                    <button class="btn btn-dark" id="btn-out">Log out</button>
+                  </li>
+                </ul>
+              </li>
+              <li class="text-center" style="list-style-type: none">
+                <p class="lead" id="user" style="margin-bottom: 0px; display:none">
+                  <%=email%>
+                </p>
+              </li>
+            </ul>
+          </span>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Contenido -->
+    <div class="row text-center m-3">
+      <div class="col-2 border-right border-black" id="seleccion">
+        <h2>Tags</h2>
+        <h5>Ciudades</h5>
+        <div id="ciudades"></div>
+        <h5>Caracteristica</h5>
+        <div id="caracteristicas"></div>
+        <h5>Punto de interes</h5>
+        <div id="puntos"></div>
+        <button class="btn btn-dark mt-3" id="btn-out">Filtrar</button>
+      </div>
+      <div class="col-9">
+        <h1 class="my-3">Parqueaderos</h1>
+        <div id="estacionamientos">
+
+        </div>
+      </div>
+      <div class="col"></div>
+    </div>
+
+    <script>
+      localStorage.setItem('email', document.getElementById('user').innerHTML)
+
+      // Generar datos
+      var datos;
+      fetch('http://localhost:3000/park')
+        .then(response => response.json())
+        .then(data => {
+          datos = data;
+          const bar = document.getElementById('estacionamientos')
+          bar.innerHTML = `<div class="row" id="row1"></div>`
+          const row = document.getElementById(`row1`)
+          data.rows.forEach(element => {
+            row.innerHTML += `
+            <div class="col-3">
+              <div class="card m-3" style="width: 14rem;">
+                <img src="https://backend.vivendo.co/sites/default/files/styles/display_post/public/2020-03/parqueadero.png.jpg?itok=GvVfphSo" class="card-img-top" width="50" height="100" alt="...">
+                <div class="card-body">
+                <h5 class="card-title">${element.nombre}</h5>
+                <p class="card-text">Dir: ${element.direccion}</p>
+                <p class="card-text">Tel: ${element.telefono}</p>
+                <p class="card-text">Ciudad: ${element.nombre_ciudad}</p>
+                <a href="/reserva/${element.id_parqueadero}" class="btn btn-primary">Reservar</a>
+                </div>
+              </div>
+            </div>`
+          });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+      // Log out
+      document.getElementById('btn-out').addEventListener('click', (event) => {
+        window.location.href = '/logout'
+      })
+
+      // Generar Espacios para seleccionar parqueaderos
+      // Ciudades
+      fetch('http://localhost:3000/ciudades')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('ciudades').innerHTML = `
+          <select id="ciudades-select" name="ciudad" class="form-select border-black">
+          </select>
+          `
+          const select = document.getElementById('ciudades-select')
+          select.innerHTML = `<option value=""></option>`
+          data.rows.forEach(element => {
+            select.innerHTML += `
+            <option value="${element.nombre_ciudad}">${element.nombre_ciudad}</option>
+            `
+          })
+
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+        // Caracteristicas
+        fetch('http://localhost:3000/caracteristicas')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('caracteristicas').innerHTML = `
+          <select id="caracteristicas-select" name="caracteristica" class="form-select border-black">
+          </select>
+          `
+          const select = document.getElementById('caracteristicas-select')
+          select.innerHTML = `<option value=""></option>`
+          let i = 2;
+          data.rows.forEach(element => {
+            select.innerHTML += `
+            <option value="${i}">${element.nombre_caracteristica}</option>
+            `
+            i++
+          })
+
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+        // Puntos
+        fetch('http://localhost:3000/puntos')
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('puntos').innerHTML = `
+          <select id="puntos-select" name="punto" class="form-select border-black">
+          </select>
+          `
+          let i = 1;
+          const select = document.getElementById('puntos-select')
+          select.innerHTML = `<option value=""></option>`
+          data.rows.forEach(element => {
+            select.innerHTML += `
+            <option value="${i}">${element.nombre}</option>
+            `
+            i++;
+          })
+
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+
+    </script>
+
+  </body>
+
+  </html>

@@ -1,0 +1,56 @@
+<%- include('partials/head') %>
+  <title>Registro de Usuario</title>
+  </head>
+
+  <body style="background-image: url('https://www.patrimonios.co/images/contenido/Novedades/parqueadero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;">
+    <div class="container text-center" style="width: 100%">
+      <div class="row align-items-center">
+        <div class="col-2"></div>
+        <div class="col-8" style="
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            padding-top: 20vh;
+          ">
+          <div class="content-login px-10">
+            <div class="border border-black boder-1 rounded p-5" style="background-color: rgba(255, 255, 255, 0.7);">
+              <h1>PARK-UD</h1>
+
+              <div>
+                <form method="post" action="/login" id="form">
+                  <div class="mb-3">
+                    <label for="email" class="form-label">Correo electronico</label>
+                    <input type="email" class="form-control border-black" id="email" name="email"
+                      placeholder="Correo Electronico" required />
+                  </div>
+                  <div class="mb-3">
+                    <label for="password" class="form-label">Contraseña</label>
+                    <input type="password" class="form-control border-black" id="password" name="password"
+                      placeholder="Contraseña" required />
+                  </div>
+                  <button type="submit" class="btn btn-dark">Ingresar</button>
+                </form>
+                <button class="btn btn-dark mt-3" id="registro">Registrarse</button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-2"></div>
+      </div>
+    </div>
+
+
+    <script>
+      const btnRegistro = document.getElementById('registro');
+      btnRegistro.addEventListener('click', (event) => {
+        window.location.href = '/registro'
+      })
+    </script>
+
+  </body>
+
+  </html>

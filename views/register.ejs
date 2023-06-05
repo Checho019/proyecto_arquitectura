@@ -1,0 +1,135 @@
+<%- include('partials/head') %>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Formulario de Registro</title>
+    </head>
+
+    <body style="background-image: url('https://www.patrimonios.co/images/contenido/Novedades/parqueadero.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;">
+        <div class="container text-center" style="width: 100%">
+            <div class="row align-items-center">
+                <div class="col-2"></div>
+                <div class="col-8" style="
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              padding-top: 7vh;
+            ">
+
+                    <div class="content-login px-10">
+                        <div class="border border-black boder-1 rounded p-5"
+                            style="background-color: rgba(255, 255, 255, 0.7);">
+                            <h2>Formulario de Registro</h2>
+                            <form method="post" action="/registro" id="form">
+                                <label for="id" class="form-label">ID:</label>
+                                <input type="text" class="form-control border-black" id="id" name="id" required>
+
+                                <div class="row">
+                                    <div class="col-5">
+                                        <label for="nombre" class="form-label">Nombre:</label>
+                                        <input type="text" class="form-control border-black" id="nombre" name="nombre"
+                                            required>
+
+                                    </div>
+                                    <div class="col-5">
+                                        <label for="apellido" class="form-label">Apellido:</label>
+                                        <input type="text" class="form-control border-black" id="apellido"
+                                            name="apellido" required>
+                                    </div>
+                                    <div class="col-2">
+                                        <label for="edad" class="form-label">Edad:</label>
+                                        <input type="number" class="form-control border-black" id="edad" name="edad"
+                                            required>
+
+                                    </div>
+                                </div>
+
+                                <label for="email" class="form-label">Email:</label>
+                                <input type="email" class="form-control border-black" id="email" name="email" required>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <label for="numTarjeta" class="form-label">Número de Tarjeta:</label>
+                                        <input type="number" class="form-control border-black" id="numTarjeta"
+                                            name="numTarjeta" required>
+                                    </div>
+                                    <div class="col">
+                                        <label for="tipoTarjeta" class="form-label">Tipo de Tarjeta:</label>
+                                        <select id="tipoTarjeta" name="tipoTarjeta" class="form-select border-black"
+                                            required>
+                                            <option value="Visa">Visa</option>
+                                            <option value="Mastercard">Mastercard</option>
+                                            <option value="American Express">American Express</option>
+                                            <option value="Discover">Discover</option>
+                                            <option value="Diners Club">Diners Club</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <input type="submit" value="Registrarse" class="btn btn-dark mt-3">
+                            </form>
+
+                            <button class="btn btn-dark mt-3" id="login">Ingresar</button>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col-2"></div>
+            </div>
+        </div>
+
+        <!-- Logica de envio -->
+        <script>
+            const btnLogin = document.getElementById('login')
+            btnLogin.addEventListener('click', (event) => {
+                window.location.href = '/loginxc'
+            })
+
+            const formulario = document.getElementById('form')
+            formulario.addEventListener('submit', (event) => {
+                // Evaluar expresion regular
+                let regex;
+                switch (document.getElementById('tipoTarjeta').value) {
+                    case 'Visa':
+                        regex = /^4[0-9]{12}(?:[0-9]{3})?$/;
+                        break;
+                    case 'Mastercard':
+                        regex = /^5[1-5][0-9]{14}$/;
+                        break;
+                    case 'American Express':
+                        regex = /^3[47][0-9]{13}$/;
+                        break;
+                    case 'Discover':
+                        regex = /^6(?:011|5[0-9]{2})[0-9]{12}$/;
+                        break;
+                    case 'Diners Club':
+                        regex = /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/;
+                        break;
+                }
+
+                if (!regex.test(formulario.numTarjeta.value)) {
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Tu número de tarjeta tiene un error'
+                    })
+                }
+
+                console.log(formulario.edad.value)
+                if(Number(formulario.edad.value) <= 17 || Number(formulario.edad.value) >= 100){
+                    event.preventDefault();
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'La edad es invalida'
+                    })
+                }
+
+            })
+
+        </script>
+    </body>
+
+    </html>

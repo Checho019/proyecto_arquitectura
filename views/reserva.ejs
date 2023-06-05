@@ -1,0 +1,211 @@
+<%- include('partials/head') %>
+    <script src="https://cdn.jsdelivr.net/npm/dayjs@1.10.7/dayjs.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Reserva</title>
+    </head>
+
+    <body>
+        <nav class="navbar navbar-expand-lg bg-black">
+            <div class="container-fluid">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+                    aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse px-3" id="navbarText">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f0/Car_with_Driver-Silhouette.svg/1200px-Car_with_Driver-Silhouette.svg.png"
+                            alt="Logo" width="90" height="70" class="d-inline-block align-text-top mx-3"
+                            style="filter: invert(100%)" />
+                        <li class="nav-item mx-2"></li>
+                        <button class="btn btn-dark my-2" id="btn-reserva">
+                            Reserva
+                        </button>
+                        <li class="nav-item mx-2"></li>
+                        <button class="btn btn-dark my-2" id="btn-historial">
+                            Historial
+                        </button>
+                        <li class="nav-item mx-2"></li>
+                        <button class="btn btn-dark my-2" id="btn-liquidacion">
+                            Usuario
+                        </button>
+                    </ul>
+                    <span class="navbar-text text-light">
+                        <ul class="mb-1">
+                            <li class="nav-item" style="list-style-type: none">
+                                <ul class="navbar-nav me-auto mb-lg-0">
+                                    <li class="nav-item mx-2">
+                                        <button class="btn btn-dark" id="btn-out">Log out</button>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido -->
+        <div class="row m-6">
+            <div class="col-7 border-right border-black m-3 px-5" id="seleccion">
+                <h1 class="text-center">Gestión de reserva</h1>
+
+                <form method="post" action="/reserva" id="form">
+                    <h3 class="text-center">Información de reserva</h3>
+                    <div class="row">
+                        <input type="text" id="id_parqueadero" name="id_parqueadero" style="display: none;" />
+                        <div class="col-2"></div>
+                        <div class="mb-3 col-4">
+                            <label for="fecha_reserva" class="form-label">Fecha de reserva</label>
+                            <input type="Date" class="form-control border-black" id="fecha_reserva" name="fecha_reserva"
+                                required />
+                        </div>
+                        <div class="mb-3 col-4">
+                            <label for="fecha_inicio" class="form-label">Hora de entrada</label>
+                            <input type="time" class="form-control border-black" id="fecha_inicio" name="fecha_inicio"
+                                required />
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
+                    <hr>
+                    <h3 class="text-center">Información de vehiculo</h3>
+                    <div class="row">
+                        <div class="mb-3 col-3">
+                            <label for="placa" class="form-label">Placa</label>
+                            <input type="text" class="form-control border-black" id="placa" name="placa"
+                                placeholder="Placa" required />
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="marca" class="form-label">Marca</label>
+                            <input type="text" class="form-control border-black" id="marca" name="marca"
+                                placeholder="Marca" required />
+                        </div>
+                        <div class="col-3">
+                            <label for="color" class="form-label">Color de vehiculo:</label>
+                            <select id="color" name="color" class="form-select border-black" required>
+                                <option value="Rojo">Rojo</option>
+                                <option value="Negro">Negro</option>
+                                <option value="Blanco">Blanco</option>
+                                <option value="Amarillo">Amarillo</option>
+                                <option value="Azul">Azul</option>
+                            </select>
+                        </div>
+                        <div class="mb-3 col-3">
+                            <label for="tipo" class="form-label">Tipo de vehiculo:</label>
+                            <select id="tipo" name="tipo" class="form-select border-black" required>
+                                <option value="1">Carro</option>
+                                <option value="2">Moto</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-2"></div>
+                        <button type="submit" class="btn btn-dark">Reservar</button>
+                        <div class="col-2"></div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-4">
+                <h1 class="my-3 text-center">Reserva</h1>
+                <p id="id" style="display: none;">
+                    <%= id %>
+                </p>
+                <div id="estacionamientos">
+
+                </div>
+            </div>
+            <div class="col"></div>
+        </div>
+
+        <script>
+            localStorage.setItem('id', document.getElementById('id').innerHTML.trim())
+            document.getElementById('id_parqueadero').value = localStorage.getItem('id')
+
+            document.getElementById('btn-reserva').addEventListener('click', (event) => {
+                window.location.href = '/'
+            })
+
+            // Generar datos
+            var datos;
+            fetch('http://localhost:3000/park/' + localStorage.getItem('id'))
+                .then(response => response.json())
+                .then(data => {
+                    datos = data;
+                    const bar = document.getElementById('estacionamientos')
+                    console.log(data)
+                    console.log(localStorage.getItem('id'))
+                    bar.innerHTML += `
+            <div>
+              <div class="m-5 text-center">
+                <img src="https://backend.vivendo.co/sites/default/files/styles/display_post/public/2020-03/parqueadero.png.jpg?itok=GvVfphSo" class="rounded img-fluid mx-auto d-block" width="500" height="400">
+                <div class="card-body">
+                <h5 class="card-text">${data.rows[0].nombre}</h5>
+                <p class="card-text">Dir: ${data.rows[0].direccion}</p>
+                <p class="card-text">Tel: ${data.rows[0].telefono}</p>
+                <p class="card-text">Ciudad: ${data.rows[0].nombre_ciudad}</p>
+                </div>
+              </div>
+            </div>`
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+
+            // Log out
+            document.getElementById('btn-out').addEventListener('click', (event) => {
+                window.location.href = '/logout'
+            })
+
+            // Obtener formulario y validar
+            const formulario = document.getElementById('form')
+            formulario.addEventListener('submit', (event) => {
+                // Evaluar expresion regular
+                let regex;
+
+                console.log(document.getElementById('tipo').value)
+                switch (document.getElementById('tipo').value) {
+                    case '1':
+                        regex = /^[A-Z]{3}\d{3,4}$/
+                        break;
+                    case '2':
+                        regex = /^[A-Z]{3}\d{2}[A-Z]$/
+                        break;
+                }
+
+                console.log(!regex.test(formulario.placa.value.toUpperCase()))
+                if (!regex.test(formulario.placa.value.toUpperCase())) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Placa invalida'
+                    })
+                    event.preventDefault();
+                    return;
+                }
+
+                let fecha = dayjs(document.getElementById('fecha_reserva').value + " " + document.getElementById('fecha_inicio').value)
+                let actual = dayjs()
+                console.log(!actual.isBefore(fecha))
+                if (!actual.isBefore(fecha)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Fecha y hora invalidas'
+                    })
+                    event.preventDefault();
+                    return;
+                }
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Excelente',
+                    text: 'Has reservado un lugar en el parqueadero'
+                })
+                // window.location.href = '/'
+
+            })
+
+        </script>
+
+    </body>
+
+    </html>
