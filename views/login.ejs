@@ -1,4 +1,6 @@
 <%- include('partials/head') %>
+  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <title>Registro de Usuario</title>
   </head>
 
@@ -31,6 +33,7 @@
                     <input type="password" class="form-control border-black" id="password" name="password"
                       placeholder="Contraseña" required />
                   </div>
+                  <div class="g-recaptcha" data-sitekey="6LeD0nQmAAAAADoAuddMl784pFFsVuAZiBXxS4NO"></div>
                   <button type="submit" class="btn btn-dark">Ingresar</button>
                 </form>
                 <button class="btn btn-dark mt-3" id="registro">Registrarse</button>
@@ -49,6 +52,20 @@
       btnRegistro.addEventListener('click', (event) => {
         window.location.href = '/registro'
       })
+
+      document.getElementById('form').addEventListener('submit', (event) => {
+        var response = grecaptcha.getResponse();
+        if (response.length === 0) {
+          Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Demuestra que no eres un robot'
+                    })
+          event.preventDefault();
+          return;
+        }
+      })
+
     </script>
 
   </body>
